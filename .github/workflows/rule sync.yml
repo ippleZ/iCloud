@@ -14,13 +14,13 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: blackmatrix7/ios_rule_script
-        path: blackmatrix7
+        path: ios_rule_script
 
     - name: Checkout RuCu6/QuanX repository
       uses: actions/checkout@v2
       with:
         repository: RuCu6/QuanX
-        path: RuCu6
+        path: RuCu6-QuanX
 
     - name: Checkout your repository
       uses: actions/checkout@v2
@@ -33,20 +33,20 @@ jobs:
 
     - name: Sync Rules
       run: |
-        cp -r blackmatrix7/rule/* Rules/
+        cp -r ios_rule_script/rule/* Rules/
 
     - name: Sync Rewrites
       run: |
-        cp -r RuCu6/Rewrites/* Rewrites/
+        cp -r RuCu6-QuanX/Rewrites/* Rewrites/
 
     - name: Sync Scripts
       run: |
-        cp -r RuCu6/Scripts/* Scripts/
+        cp -r RuCu6-QuanX/Scripts/* Scripts/
 
     - name: Commit and push changes
       run: |
-        git config --global user.name 'GitHub Acitons'
-        git config --global user.email 'Acitons@GitHub.com'
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'Actions@GitHub.com'
         git add Rules Rewrites Scripts
         git commit -m 'Daily sync of Rules, Rewrites, and Scripts'
         git push
