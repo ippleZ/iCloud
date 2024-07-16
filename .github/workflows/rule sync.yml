@@ -25,6 +25,9 @@ jobs:
     - name: Checkout your repository
       uses: actions/checkout@v2
 
+    - name: List contents of ios_rule_script/rule directory
+      run: ls -la ios_rule_script/rule/
+
     - name: Create Rules, Rewrites, and Scripts directories if not exists
       run: |
         mkdir -p Rules
@@ -45,8 +48,8 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git config --global user.name 'GitHub Actions'
-        git config --global user.email 'Actions@GitHub.com'
+        git config --global user.name 'your-username'
+        git config --global user.email 'your-email@example.com'
         git add Rules Rewrites Scripts
         git commit -m 'Daily sync of Rules, Rewrites, and Scripts'
         git push
