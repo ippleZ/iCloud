@@ -1,39 +1,37 @@
-name: Daily Rule Sync
+name: Sync iOS Rules
 
 on:
   schedule:
-    - cron: '0 10 * * *'  # 每天早上10点运行
-  workflow_dispatch:  # 手动触发
+    - cron: '0 12 * * *'
+  workflow_dispatch:
 
 jobs:
-  sync-rules:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout source repository
-      uses: actions/checkout@v2
-      with:
-        repository: blackmatrix7/ios_rule_script
-        path: source-repo
-
     - name: Checkout target repository
       uses: actions/checkout@v2
       with:
-        path: target-repo
+        repository: blackmatrix7/ios_rule_script
+        path: ios_rule_script
 
-    - name: Copy rules
+    - name: Checkout your repository
+      uses: actions/checkout@v2
+      with:
+        path: repo
+
+    - name: Sync rules
       run: |
-        cp -r source-repo/rule/* target-repo/rule/
-
+        cp -r ios_rule_script/rule/* repo/rule/
+      
     - name: Commit and push changes
       run: |
-        cd target-repo
-        git config --global user.email "action@github.com"
-        git config --global user.name "GitHub Action"
-        git add rule/
-        
-        if git diff --staged --quiet; then
-          echo "No changes to commit"
-        else
-          git commit -m "Update rules from blackmatrix7/ios_rule_script"
-          git push
+        cd repo
+        git config --global user.name 'your-username'
+        git config --global user.email 'your-email@example.com'
+        git add .
+        git commit -m 'Daily sync of iOS rules'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
