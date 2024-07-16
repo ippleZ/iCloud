@@ -3,7 +3,7 @@ name: Sync Rule
 on:
   schedule:
     - cron: '0 10 * * *'  # 每天早上十点触发
-
+  workflow_dispatch:  # 允许手动触发
 jobs:
   sync:
     runs-on: ubuntu-latest
