@@ -1,4 +1,4 @@
-name: Sync iOS Rules
+name: Sync Rules, Rewrites, and Scripts
 
 on:
   schedule:
@@ -10,26 +10,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout target repository
+    - name: Checkout blackmatrix7/ios_rule_script repository
       uses: actions/checkout@v2
       with:
         repository: blackmatrix7/ios_rule_script
-        path: ios_rule_script
+        path: blackmatrix7
+
+    - name: Checkout RuCu6/QuanX repository
+      uses: actions/checkout@v2
+      with:
+        repository: RuCu6/QuanX
+        path: RuCu6
 
     - name: Checkout your repository
       uses: actions/checkout@v2
-      with:
-        path: repo
 
-    - name: Sync rules
+    - name: Create Rules, Rewrites, and Scripts directories if not exists
       run: |
-        cp -r ios_rule_script/rule/* repo/rule/
-      
+        mkdir -p Rules
+        mkdir -p Rewrites
+        mkdir -p Scripts
+
+    - name: Sync Rules
+      run: |
+        cp -r blackmatrix7/rule/* Rules/
+
+    - name: Sync Rewrites
+      run: |
+        cp -r RuCu6/Rewrites/* Rewrites/
+
+    - name: Sync Scripts
+      run: |
+        cp -r RuCu6/Scripts/* Scripts/
+
     - name: Commit and push changes
       run: |
-        cd repo
         git config --global user.name 'GitHub Acitons'
-        git config --global user.email 'actions@github.com'
-        git add .
-        git commit -m 'Daily sync of iOS rules'
+        git config --global user.email 'Acitons@GitHub.com'
+        git add Rules Rewrites Scripts
+        git commit -m 'Daily sync of Rules, Rewrites, and Scripts'
         git push
