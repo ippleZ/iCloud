@@ -1,0 +1,33 @@
+name: Sync Rule
+
+on:
+  schedule:
+    - cron: '0 10 * * *'  # 每天早上十点触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v2
+        with:
+          repository: blackmatrix7/ios_rule_script  # 源仓库地址
+          path: source_repo  # 本地路径，用于存储源代码
+
+      - name: Create Rules folder if not exists
+        run: mkdir -p Rules
+        working-directory: ${{ github.workspace }}
+
+      - name: Copy files to target repository
+        run: |
+          cp -r source_repo/rule/* Rules/
+        working-directory: ${{ github.workspace }}
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add Rules/
+          git commit -m "Sync at $(date)"
+          git push origin HEAD:main
