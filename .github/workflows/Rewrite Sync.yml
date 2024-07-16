@@ -1,0 +1,42 @@
+name: Daily Rewrite Sync
+
+on:
+  schedule:
+    - cron: '0 10 * * *'  # 每天早上10点运行
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  sync-rules:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source repository
+      uses: actions/checkout@v2
+      with:
+        repository: RuCu6/QuanX
+        path: source-repo
+
+    - name: Checkout target repository
+      uses: actions/checkout@v2
+      with:
+        path: target-repo
+
+    - name: Create Rewrites directory if not exists
+      run: mkdir -p target-repo/Rewrites
+
+    - name: Copy Rewrites
+      run: |
+        cp -r source-repo/Rewrites/* target-repo/Rewrites/
+
+    - name: Commit and push changes
+      run: |
+        cd target-repo
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add Rewrites/
+        
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update rewrites from RuCu6/QuanX"
+          git push
