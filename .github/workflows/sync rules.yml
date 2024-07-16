@@ -21,10 +21,10 @@ jobs:
       with:
         path: my_repo
 
-    - name: Sync rules
+    - name: Sync Rules
       run: |
-        mkdir -p my_repo/rule  # 创建目标文件夹，如果不存在
-        cp -r ios_rule_script/rule/* my_repo/rule/
+        mkdir -p my_repo/Rules  # 创建目标文件夹，如果不存在
+        cp -r ios_rule_script/rule/* my_repo/Rules/
       
     - name: Commit and push changes
       run: |
