@@ -1,55 +1,39 @@
-name: Sync Rules, Rewrites, and Scripts
+name: Daily Rule Sync
 
 on:
   schedule:
-    - cron: '0 12 * * *'
-  workflow_dispatch:
+    - cron: '0 10 * * *'  # 每天早上10点运行
+  workflow_dispatch:  # 手动触发
 
 jobs:
-  sync:
+  sync-rules:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout blackmatrix7/ios_rule_script repository
+    - name: Checkout source repository
       uses: actions/checkout@v2
       with:
         repository: blackmatrix7/ios_rule_script
-        path: ios_rule_script
+        path: source-repo
 
-    - name: Checkout RuCu6/QuanX repository
+    - name: Checkout target repository
       uses: actions/checkout@v2
       with:
-        repository: RuCu6/QuanX
-        path: RuCu6-QuanX
+        path: target-repo
 
-    - name: Checkout your repository
-      uses: actions/checkout@v2
-
-    - name: List contents of ios_rule_script/rule directory
-      run: ls -la ios_rule_script/rule/
-
-    - name: Create Rules, Rewrites, and Scripts directories if not exists
+    - name: Copy rules
       run: |
-        mkdir -p Rules
-        mkdir -p Rewrites
-        mkdir -p Scripts
-
-    - name: Sync Rules
-      run: |
-        cp -r ios_rule_script/rule/* Rules/
-
-    - name: Sync Rewrites
-      run: |
-        cp -r RuCu6-QuanX/Rewrites/* Rewrites/
-
-    - name: Sync Scripts
-      run: |
-        cp -r RuCu6-QuanX/Scripts/* Scripts/
+        cp -r source-repo/rule/* target-repo/rule/
 
     - name: Commit and push changes
       run: |
-        git config --global user.name 'your-username'
-        git config --global user.email 'your-email@example.com'
-        git add Rules Rewrites Scripts
-        git commit -m 'Daily sync of Rules, Rewrites, and Scripts'
-        git push
+        cd target-repo
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git add rule/
+        
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update rules from blackmatrix7/ios_rule_script"
+          git push
