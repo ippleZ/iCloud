@@ -2,7 +2,7 @@ name: Sync Rules
 
 on:
   schedule:
-    - cron: '0 10 * * *' # 每天10点
+    - cron: '0 11 * * *' # 每天10点
   workflow_dispatch: # 允许手动触发
 
 jobs:
