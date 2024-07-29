@@ -1,2 +1,3 @@
 baidu.com###\31  > div.wenda-general_72WpQ
 chatgpt.com##div:nth-child(8)
+macwk.cn###io-popup-tips
