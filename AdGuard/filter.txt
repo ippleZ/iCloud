@@ -1,0 +1,2 @@
+baidu.com###\31
+chatgpt.com##div:nth-child(8)
