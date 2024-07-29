@@ -1,2 +1,2 @@
-baidu.com###\31
+baidu.com###\31  > div.wenda-general_72WpQ
 chatgpt.com##div:nth-child(8)
